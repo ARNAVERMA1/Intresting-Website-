@@ -1,0 +1,354 @@
+/* --- progressive reveal -------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- custom cursor (pointer devices only, injected by cursor.js) --------- */
+.ae-cursor-dot,
+.ae-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.ae-cursor-dot.is-visible,
+.ae-cursor-ring.is-visible {
+  opacity: 1;
+}
+.ae-cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg);
+}
+.ae-cursor-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  transition: opacity 0.25s ease, border-color 0.4s ease;
+}
+.ae-cursor-ring.is-active {
+  border-color: var(--mode-color);
+}
+.ae-cursor-ring.is-pressed {
+  border-color: var(--accent-2);
+}
+@media (hover: none) {
+  .ae-cursor-dot, .ae-cursor-ring { display: none; }
+}
+
+/* --- buttons -------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: transform 0.35s var(--ease-out), background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.btn-primary {
+  background: var(--fg);
+  color: #0a0714;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: var(--accent-2);
+}
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--fg);
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  border-color: var(--mode-color);
+  color: var(--mode-color);
+}
+
+/* --- header mark + sound toggle -------------------------------------------- */
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+}
+.site-logo-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mode-color);
+  box-shadow: 0 0 14px 2px color-mix(in srgb, var(--mode-color) 70%, transparent);
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+.site-logo-text {
+  color: var(--fg-dim);
+}
+
+.sound-toggle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+}
+.sound-toggle-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+}
+.sound-toggle-bars i {
+  width: 2.5px;
+  border-radius: 2px;
+  background: var(--fg-dim);
+  height: 40%;
+  transition: height 0.3s ease, background 0.3s ease;
+}
+.sound-toggle-bars i:nth-child(2) { height: 100%; }
+.sound-toggle-bars i:nth-child(3) { height: 65%; }
+.sound-toggle.is-on .sound-toggle-bars i {
+  background: var(--accent-2);
+  animation: ae-bars 0.9s ease-in-out infinite;
+}
+.sound-toggle.is-on .sound-toggle-bars i:nth-child(2) { animation-delay: 0.15s; }
+.sound-toggle.is-on .sound-toggle-bars i:nth-child(3) { animation-delay: 0.3s; }
+
+/* --- engine rings --------------------------------------------------------- */
+.engine-rings {
+  position: relative;
+  width: clamp(200px, 26vw, 300px);
+  aspect-ratio: 1;
+}
+.engine-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+}
+.engine-ring-2 { inset: 14%; border-color: color-mix(in srgb, var(--mode-color) 40%, transparent); }
+.engine-ring-3 { inset: 28%; border-color: color-mix(in srgb, var(--mode-color) 65%, transparent); }
+.engine-ring-1 { animation: ae-spin 22s linear infinite; }
+.engine-ring-2 { animation: ae-spin-rev 16s linear infinite; }
+.engine-ring-3 { animation: ae-spin 10s linear infinite; }
+.engine-core {
+  position: absolute;
+  inset: 44%;
+  border-radius: 50%;
+  background: var(--mode-color);
+  filter: blur(0.5px);
+  box-shadow: 0 0 40px 6px color-mix(in srgb, var(--mode-color) 55%, transparent);
+  animation: ae-breathe calc(2.8s / max(var(--ae-motion), 0.2)) ease-in-out infinite;
+}
+
+/* --- attention indicator ---------------------------------------------------- */
+.ae-indicator {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: var(--z-indicator);
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+.ae-indicator-ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.ae-indicator-track,
+.ae-indicator-progress {
+  fill: none;
+  stroke-width: 2.4;
+}
+.ae-indicator-track {
+  stroke: var(--line);
+}
+.ae-indicator-progress {
+  stroke: var(--mode-color);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s var(--ease-out), stroke 0.6s ease;
+}
+.ae-indicator-core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mode-color);
+  box-shadow: 0 0 18px 3px color-mix(in srgb, var(--mode-color) 60%, transparent);
+  animation: ae-breathe calc(2.4s / max(var(--ae-motion), 0.2)) ease-in-out infinite;
+  transition: background 0.6s ease;
+}
+.ae-indicator.is-pulsing .ae-indicator-core {
+  animation: ae-pulse-once 0.6s var(--ease-out);
+}
+.ae-indicator.is-rewarded .ae-indicator-core {
+  animation: ae-reward-pulse 1.8s var(--ease-out);
+}
+
+.ae-indicator-panel {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + 78px);
+  z-index: var(--z-indicator);
+  width: min(260px, 70vw);
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.ae-indicator-panel.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.ae-indicator-mode-label {
+  font-family: var(--font-display);
+  color: var(--mode-color);
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+.ae-indicator-copy {
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+}
+
+/* --- cards ------------------------------------------------------------------ */
+.card {
+  position: relative;
+  padding: 26px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at var(--card-glow-x, 50%) var(--card-glow-y, 0%), rgba(185, 164, 255, 0.14), transparent 60%),
+    linear-gradient(160deg, var(--bg-elevated), var(--bg-elevated-2));
+  transform-style: preserve-3d;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 20px 50px -24px rgba(139, 111, 255, 0.45);
+}
+.card-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--mode-color);
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 0.92rem;
+}
+.card.is-evolving {
+  animation: ae-evolve 0.7s var(--ease-in-out);
+}
+.card.is-evolved {
+  border-color: var(--mode-color);
+}
+
+/* --- physics playground items ------------------------------------------------ */
+.physics-item {
+  display: grid;
+  place-items: center;
+  width: clamp(84px, 11vw, 118px);
+  height: clamp(84px, 11vw, 118px);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(160deg, rgba(185, 164, 255, 0.18), rgba(124, 240, 210, 0.08));
+  color: var(--fg);
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  cursor: grab;
+  user-select: none;
+}
+.physics-item.is-dragging {
+  cursor: grabbing;
+  border-color: var(--accent-2);
+}
+.physics-item-a { background: linear-gradient(160deg, rgba(214, 140, 240, 0.24), rgba(185, 164, 255, 0.1)); }
+.physics-item-b { background: linear-gradient(160deg, rgba(255, 207, 122, 0.26), rgba(255, 179, 122, 0.1)); }
+.physics-item-c { background: linear-gradient(160deg, rgba(142, 163, 214, 0.22), rgba(185, 164, 255, 0.08)); }
+.physics-item-d { background: linear-gradient(160deg, rgba(124, 240, 210, 0.26), rgba(124, 240, 210, 0.06)); }
+.physics-item-e { background: linear-gradient(160deg, rgba(255, 179, 122, 0.24), rgba(214, 140, 240, 0.1)); }
+
+/* --- hero letters -------------------------------------------------------- */
+.ae-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.ae-letter {
+  display: inline-block;
+  transition: color 0.4s ease;
+}
+
+/* --- easter egg surface elements ------------------------------------------ */
+.ae-burst {
+  position: fixed;
+  width: 0;
+  height: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+.ae-burst-shard {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: hsl(var(--hue, 260), 85%, 72%);
+  animation: ae-shard 1.1s var(--ease-out) forwards;
+}
+
+.ae-idle-hint,
+.ae-secret-note {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 14px);
+  z-index: var(--z-overlay);
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  backdrop-filter: blur(10px);
+  font-size: 0.86rem;
+  color: var(--fg-dim);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  text-align: center;
+}
+.ae-idle-hint span { color: var(--fg); }
+.ae-idle-hint.is-visible,
+.ae-secret-note.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Konami "secret mode" — a brief, coherent full-page shift, not a mess. */
+body.ae-secret-mode {
+  animation: ae-secret-hue 5s linear;
+}

@@ -1,0 +1,274 @@
+.ae-bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-bg);
+  pointer-events: none;
+}
+
+main, header, footer {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+section {
+  padding-block: clamp(72px, 11vw, 148px);
+}
+
+.section-head {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+  padding-inline: 6vw;
+  margin-bottom: clamp(40px, 6vw, 80px);
+}
+.section-head h2 {
+  font-size: clamp(2rem, 4.4vw, 3.1rem);
+  margin-block: 0.5em 0.4em;
+}
+.section-lede {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+
+/* --- header ------------------------------------------------------------ */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(14px, 2.4vw, 24px) clamp(18px, 4vw, 40px);
+  background: linear-gradient(to bottom, rgba(7, 6, 13, 0.72), transparent);
+  backdrop-filter: blur(6px);
+}
+
+.site-nav {
+  display: none;
+  gap: clamp(18px, 2vw, 34px);
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+}
+@media (min-width: 760px) {
+  .site-nav {
+    display: flex;
+  }
+}
+.site-nav a {
+  transition: color 0.25s var(--ease-out);
+}
+.site-nav a:hover {
+  color: var(--fg);
+}
+
+/* --- hero ---------------------------------------------------------------- */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: 6vw;
+  position: relative;
+}
+.hero-inner {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 26px);
+}
+.hero-title {
+  font-size: clamp(2.6rem, 9vw, 6.4rem);
+  max-width: 16ch;
+}
+.hero-sub {
+  max-width: 46ch;
+  font-size: clamp(1.02rem, 1.8vw, 1.25rem);
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: clamp(20px, 4vh, 44px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.scroll-cue-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--mode-color));
+}
+.scroll-cue-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+/* --- engine section -------------------------------------------------- */
+.engine-grid {
+  display: grid;
+  gap: clamp(40px, 6vw, 90px);
+  align-items: center;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 6vw;
+}
+@media (min-width: 860px) {
+  .engine-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+}
+
+.engine-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.engine-pipeline {
+  display: grid;
+  gap: 22px;
+}
+.pipeline-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 18px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(185, 164, 255, 0.05), transparent 60%);
+}
+.pipeline-step h3 {
+  grid-column: 2;
+  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+.pipeline-step p {
+  grid-column: 2;
+  font-size: 0.94rem;
+}
+.pipeline-index {
+  grid-row: 1 / span 2;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--mode-color);
+  opacity: 0.75;
+}
+
+.engine-hint {
+  text-align: center;
+  margin-top: clamp(36px, 5vw, 64px);
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--fg-faint);
+}
+
+/* --- showcase / cards ---------------------------------------------------- */
+.card-grid {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 26px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 6vw;
+}
+
+/* --- pinned scroll story -------------------------------------------------- */
+.story-wrapper {
+  position: relative;
+  height: 420vh;
+}
+.story-viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-inline: 6vw;
+}
+.story-step {
+  position: absolute;
+  max-width: 640px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.story-step h2 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+}
+.story-layer {
+  position: absolute;
+  inset: -20% -10%;
+  background: radial-gradient(circle at 30% 30%, rgba(185, 164, 255, 0.16), transparent 60%);
+  pointer-events: none;
+  transform: translate3d(calc(var(--story-progress, 0) * -70px), calc(var(--story-progress, 0) * 50px), 0);
+  transition: transform 0.05s linear;
+}
+.story-layer-alt {
+  background: radial-gradient(circle at 70% 70%, rgba(124, 240, 210, 0.12), transparent 55%);
+  transform: translate3d(calc(var(--story-progress, 0) * 90px), calc(var(--story-progress, 0) * -60px), 0);
+}
+
+/* --- physics playground -------------------------------------------------- */
+.physics-stage {
+  position: relative;
+  max-width: var(--container);
+  margin-inline: auto;
+  height: clamp(340px, 46vw, 480px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: linear-gradient(160deg, var(--bg-elevated), var(--bg-elevated-2));
+  overflow: hidden;
+}
+
+/* --- footer -------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: clamp(56px, 8vw, 96px);
+}
+.footer-inner {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 6vw;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: center;
+}
+.footer-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  color: var(--fg);
+}
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  font-size: 0.9rem;
+  color: var(--fg-faint);
+}
+.footer-meta a {
+  color: var(--accent-2);
+}

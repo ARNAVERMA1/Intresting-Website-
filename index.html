@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Attention Engine — a website that notices you</title>
+  <meta name="description" content="An evolving digital experience with a client-side Attention Engine that senses how you move, scroll and linger — then reshapes itself around you in real time." />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#07060d" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,680;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23b9a4ff' stroke-width='8'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23b9a4ff'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="ae-loader" aria-hidden="true">
+    <div class="ae-loader-mark"></div>
+  </div>
+
+  <canvas id="ae-bg-canvas" class="ae-bg-canvas" aria-hidden="true"></canvas>
+
+  <header class="site-header">
+    <a href="#hero" class="site-logo" data-magnetic data-sound="click" aria-label="Attention Engine — back to top">
+      <span class="site-logo-mark" aria-hidden="true"></span>
+      <span class="site-logo-text">ATTN&nbsp;/&nbsp;ENGINE</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Sections">
+      <a href="#engine" data-magnetic>Engine</a>
+      <a href="#showcase" data-magnetic>Fragments</a>
+      <a href="#story" data-magnetic>Story</a>
+      <a href="#playground" data-magnetic>Playground</a>
+    </nav>
+
+    <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" aria-label="Enable ambient sound" data-magnetic>
+      <span class="sound-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </header>
+
+  <main id="main">
+    <!-- ============================= HERO ============================= -->
+    <section id="hero" class="hero" data-section aria-label="Introduction">
+      <div class="hero-inner">
+        <p class="eyebrow" data-reveal>AN EVOLVING DIGITAL EXPERIENCE</p>
+        <h1 class="hero-title" data-hero-title data-reveal>Attention, noticed.</h1>
+        <p class="hero-sub" data-reveal data-reveal-delay="120">
+          Move. Scroll. Linger. This page is quietly reading how you explore it, then
+          reshaping itself around you — in real time, on your device, right now.
+        </p>
+        <div class="hero-actions" data-reveal data-reveal-delay="220">
+          <a href="#engine" class="btn btn-primary" data-magnetic data-sound="hover">
+            See how it watches
+          </a>
+          <a href="#playground" class="btn btn-ghost" data-magnetic data-sound="hover">
+            Just let me play
+          </a>
+        </div>
+      </div>
+
+      <div class="scroll-cue" aria-hidden="true">
+        <span class="scroll-cue-line"></span>
+        <span class="scroll-cue-label">scroll</span>
+      </div>
+    </section>
+
+    <!-- ============================ ENGINE ============================= -->
+    <section id="engine" class="engine" data-section aria-label="The Attention Engine">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">THE CORE EXPERIENCE</p>
+        <h2>An engine that pays attention back.</h2>
+        <p class="section-lede">
+          A lightweight, client-side model watches interaction patterns — never content,
+          never identity — and estimates one thing: how engaged you seem right now.
+          That estimate quietly reshapes motion, pacing and what gets a chance to surprise you.
+        </p>
+      </div>
+
+      <div class="engine-grid">
+        <div class="engine-visual" data-reveal aria-hidden="true">
+          <div class="engine-rings">
+            <span class="engine-ring engine-ring-1"></span>
+            <span class="engine-ring engine-ring-2"></span>
+            <span class="engine-ring engine-ring-3"></span>
+            <span class="engine-core"></span>
+          </div>
+        </div>
+
+        <div class="engine-pipeline" data-reveal-group>
+          <div class="pipeline-step">
+            <span class="pipeline-index">01</span>
+            <h3>Interaction Signals</h3>
+            <p>Idle time, scroll speed &amp; direction, pointer movement, click rhythm, section dwell.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="pipeline-index">02</span>
+            <h3>Engagement Model</h3>
+            <p>A configurable heuristic turns raw signals into one engagement score — swappable for real ML later.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="pipeline-index">03</span>
+            <h3>Attention State</h3>
+            <p>Smoothed, hysteresis-guarded modes: dormant, ambient, curious, engaged, flow, fixated.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="pipeline-index">04</span>
+            <h3>Experience Adaptation</h3>
+            <p>Motion, novelty and pacing bend to match — never louder just because you paused.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="engine-hint" data-reveal>
+        Watch the mark in the corner — it's not decoration, it's this engine, live.
+      </p>
+    </section>
+
+    <!-- =========================== SHOWCASE ============================ -->
+    <section id="showcase" class="showcase" data-section aria-label="Interactive fragments">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">INTERACTIVE FRAGMENTS</p>
+        <h2>Small worlds, worth lingering on.</h2>
+        <p class="section-lede">Tilt them. Click one a few times in a row and see what happens.</p>
+      </div>
+
+      <div class="card-grid" data-reveal-group>
+        <article class="card" data-variants='[{"badge":"◆ 01","title":"Particle Field","desc":"A canvas of drifting points behind everything, quietly linked by attention density."},{"badge":"◆ 01 — evolved","title":"It reacts to you","desc":"Curious or engaged, it draws constellations near your cursor. Idle, it lets them drift apart."},{"badge":"◆ 01 — noticed","title":"Okay, you found it","desc":"Keep clicking and it just keeps changing — that is the whole idea."}]'>
+          <span class="card-badge">◆ 01</span>
+          <h3 class="card-title">Particle Field</h3>
+          <p class="card-desc">A canvas of drifting points behind everything, quietly linked by attention density.</p>
+        </article>
+
+        <article class="card" data-variants='[{"badge":"◆ 02","title":"Physics Playground","desc":"Drag the shapes below. They carry momentum, bounce, and settle — real inertia, not a loop."},{"badge":"◆ 02 — evolved","title":"Nothing is scripted","desc":"Every collision is computed live from your last drag. Try flicking one hard."},{"badge":"◆ 02 — noticed","title":"You like this one","desc":"Scroll down — the playground section is waiting for exactly this kind of curiosity."}]'>
+          <span class="card-badge">◆ 02</span>
+          <h3 class="card-title">Physics Playground</h3>
+          <p class="card-desc">Drag the shapes below. They carry momentum, bounce, and settle — real inertia, not a loop.</p>
+        </article>
+
+        <article class="card" data-variants='[{"badge":"◆ 03","title":"Sound-Ready","desc":"Off by default. Toggle it in the header for a procedural, generative ambience."},{"badge":"◆ 03 — evolved","title":"Nothing pre-recorded","desc":"Every tone is synthesized in the browser and tied to real moments — a mode change, a reward."},{"badge":"◆ 03 — noticed","title":"Go on, turn it on","desc":"It stays quiet until you ask. Headphones recommended."}]'>
+          <span class="card-badge">◆ 03</span>
+          <h3 class="card-title">Sound-Ready</h3>
+          <p class="card-desc">Off by default. Toggle it in the header for a procedural, generative ambience.</p>
+        </article>
+
+        <article class="card" data-variants='[{"badge":"◆ 04","title":"Hidden Things","desc":"Not everything here announces itself. Some of it just waits."},{"badge":"◆ 04 — evolved","title":"A hint, since you asked","desc":"Five quick clicks on the mark, top-left. Or an old cheat code, on your keyboard."},{"badge":"◆ 04 — noticed","title":"Go find them","desc":"You are clearly the type who finishes what they start."}]'>
+          <span class="card-badge">◆ 04</span>
+          <h3 class="card-title">Hidden Things</h3>
+          <p class="card-desc">Not everything here announces itself. Some of it just waits.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================= STORY ============================= -->
+    <section id="story" class="story" data-section aria-label="Scroll story">
+      <div class="story-wrapper" data-story-wrapper>
+        <div class="story-viewport">
+          <div class="story-layer" aria-hidden="true"></div>
+          <div class="story-layer story-layer-alt" aria-hidden="true"></div>
+
+          <div class="story-step" data-story-step>
+            <p class="eyebrow">01</p>
+            <h2>Most sites are static.</h2>
+            <p>Same page, same pace, whoever you are, however you feel.</p>
+          </div>
+          <div class="story-step" data-story-step>
+            <p class="eyebrow">02</p>
+            <h2>This one listens.</h2>
+            <p>To your cursor, your scroll, your pauses — nothing else.</p>
+          </div>
+          <div class="story-step" data-story-step>
+            <p class="eyebrow">03</p>
+            <h2>It adapts without asking.</h2>
+            <p>Gently. Never louder just because you slowed down.</p>
+          </div>
+          <div class="story-step" data-story-step>
+            <p class="eyebrow">04</p>
+            <h2>And it rewards curiosity.</h2>
+            <p>Stay a while. Something changes for the people who do.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PLAYGROUND ========================== -->
+    <section id="playground" class="playground" data-section aria-label="Physics playground">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">TOUCH IT</p>
+        <h2>A small, honest physics toy.</h2>
+        <p class="section-lede">Drag. Flick. Let go. Works with a mouse, a finger, or both at once.</p>
+      </div>
+
+      <div class="physics-stage" aria-label="Draggable attention states">
+        <div class="physics-item physics-item-a" data-x="40" data-y="60">curious</div>
+        <div class="physics-item physics-item-b" data-x="220" data-y="140">flow</div>
+        <div class="physics-item physics-item-c" data-x="120" data-y="230">idle</div>
+        <div class="physics-item physics-item-d" data-x="320" data-y="60">engaged</div>
+        <div class="physics-item physics-item-e" data-x="20" data-y="300">notice</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== ATTENTION MODE INDICATOR ====================== -->
+  <button id="attention-indicator" class="ae-indicator" type="button" aria-expanded="false" aria-controls="attention-panel" data-magnetic>
+    <svg class="ae-indicator-ring" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+      <circle class="ae-indicator-track" cx="32" cy="32" r="27" />
+      <circle class="ae-indicator-progress" cx="32" cy="32" r="27" />
+    </svg>
+    <span class="ae-indicator-core" aria-hidden="true"></span>
+    <span class="sr-only">Attention mode — open details</span>
+  </button>
+  <div id="attention-panel" class="ae-indicator-panel" aria-hidden="true">
+    <p class="ae-indicator-mode-label">Ambient</p>
+    <p class="ae-indicator-copy">Gently aware — casual scrolling, calm motion.</p>
+  </div>
+
+  <footer class="site-footer" data-section id="footer">
+    <div class="footer-inner" data-reveal>
+      <p class="footer-line">You made it to the end. Or you jumped straight here — the engine noticed that too.</p>
+      <div class="footer-meta">
+        <span>Built as a living page, not a landing page.</span>
+        <a href="mailto:arnavverma1006@gmail.com" data-magnetic>Say hello</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/utils/utils.js" defer></script>
+  <script src="js/attention/signals.js" defer></script>
+  <script src="js/attention/engagementModel.js" defer></script>
+  <script src="js/attention/attentionState.js" defer></script>
+  <script src="js/attention/experienceAdapter.js" defer></script>
+  <script src="js/components/cursor.js" defer></script>
+  <script src="js/components/particles.js" defer></script>
+  <script src="js/components/heroType.js" defer></script>
+  <script src="js/components/attentionIndicator.js" defer></script>
+  <script src="js/components/cards.js" defer></script>
+  <script src="js/components/scrollStory.js" defer></script>
+  <script src="js/components/physicsPlayground.js" defer></script>
+  <script src="js/components/soundEngine.js" defer></script>
+  <script src="js/components/easterEggs.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
