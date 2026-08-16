@@ -323,11 +323,12 @@
 }
 
 .ae-idle-hint,
-.ae-secret-note {
+.ae-secret-note,
+.ae-toast {
   position: fixed;
   left: 50%;
   bottom: 28px;
-  transform: translate(-50%, 14px);
+  transform: translate(-50%, var(--toast-dy, 14px));
   z-index: var(--z-overlay);
   padding: 12px 20px;
   border-radius: 999px;
@@ -343,9 +344,10 @@
 }
 .ae-idle-hint span { color: var(--fg); }
 .ae-idle-hint.is-visible,
-.ae-secret-note.is-visible {
+.ae-secret-note.is-visible,
+.ae-toast.is-visible {
   opacity: 1;
-  transform: translate(-50%, 0);
+  --toast-dy: 0px;
 }
 
 /* Konami "secret mode" — a brief, coherent full-page shift, not a mess. */
