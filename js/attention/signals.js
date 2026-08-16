@@ -129,6 +129,13 @@
     }
 
     // --- section dwell tracking via IntersectionObserver -------------------
+    // "Prominence" is measured against whichever is smaller, the section or
+    // the viewport — a plain intersectionRatio (visible-area ÷ target-area)
+    // would never cross 0.4 for a section taller than the viewport (like
+    // the pinned story section), silently erasing it from dwell/exploration
+    // tracking. Fine-grained thresholds keep callbacks frequent enough for
+    // that custom metric to react promptly regardless of section size.
+    const SECTION_THRESHOLDS = Array.from({ length: 21 }, (_, i) => i / 20);
     let sectionObserver = null;
     function observeSections(sectionEls) {
       if (sectionObserver) sectionObserver.disconnect();
@@ -136,7 +143,11 @@
         (entries) => {
           entries.forEach((entry) => {
             const id = entry.target.id || targetKey(entry.target);
-            if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+            const viewportHeight = entry.rootBounds?.height || window.innerHeight;
+            const targetHeight = entry.target.getBoundingClientRect().height || 1;
+            const prominence = entry.intersectionRect.height / Math.min(targetHeight, viewportHeight);
+
+            if (entry.isIntersecting && prominence > 0.4) {
               if (currentSection && currentSection !== id) {
                 closeSection(currentSection);
               }
@@ -146,13 +157,13 @@
                 visitedSectionIds.add(id);
                 emitter.emit('section', id);
               }
-            } else if (currentSection === id && entry.intersectionRatio < 0.15) {
+            } else if (currentSection === id && prominence < 0.15) {
               closeSection(id);
               currentSection = null;
             }
           });
         },
-        { threshold: [0, 0.15, 0.4, 0.6] }
+        { threshold: SECTION_THRESHOLDS }
       );
       sectionEls.forEach((el) => sectionObserver.observe(el));
     }

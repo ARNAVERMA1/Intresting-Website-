@@ -21,6 +21,7 @@
 
     const sections = [...document.querySelectorAll('[data-section]')];
     signals.observeSections(sections);
+    signals.on('section', (id) => document.dispatchEvent(new CustomEvent('attention:section', { detail: { id } })));
 
     window.AEExperienceAdapter.createExperienceAdapter(attentionState);
     signals.start();
@@ -61,6 +62,9 @@
     window.AESoundEngine.initSoundEngine(soundToggle);
 
     window.AEEasterEggs.initEasterEggs({ logoEl: document.querySelector('.site-logo') });
+
+    const footerLine = document.querySelector('.footer-line');
+    if (footerLine) window.AEJourneyMemory.initJourneyMemory(footerLine);
 
     // First paint is done — release the loading veil.
     requestAnimationFrame(() => {
