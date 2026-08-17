@@ -13,7 +13,9 @@
 
   const MODE_RANK = { dormant: 0, ambient: 1, curious: 2, fixated: 2, engaged: 3, flow: 4 };
 
-  const TOTAL_SECTIONS = 6; // hero, engine, showcase, story, playground, footer
+  // Counted from the DOM rather than hardcoded, so adding a section to the
+  // page can't silently make "explored all of it" unreachable.
+  const countSections = () => document.querySelectorAll('[data-section]').length || 1;
 
   function initJourneyMemory(footerLineEl) {
     if (!footerLineEl) return null;
@@ -39,7 +41,9 @@
     document.addEventListener('attention:evolve', () => evolveCount++);
 
     function describeJourney() {
-      const exploredAll = visited.size >= TOTAL_SECTIONS - 1; // footer itself doesn't count until now
+      // The footer is the section being rendered right now, so reaching every
+      // other one already counts as having explored the whole page.
+      const exploredAll = visited.size >= countSections() - 1;
       if (peakMode === 'flow') {
         return "You reached flow. That doesn't happen for everyone who visits.";
       }

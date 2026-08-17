@@ -27,6 +27,7 @@
     <div class="ae-loader-mark"></div>
   </div>
 
+  <canvas id="ae-shader-canvas" class="ae-shader-canvas" aria-hidden="true"></canvas>
   <canvas id="ae-bg-canvas" class="ae-bg-canvas" aria-hidden="true"></canvas>
 
   <header class="site-header">
@@ -40,6 +41,7 @@
       <a href="#showcase" data-magnetic>Fragments</a>
       <a href="#story" data-magnetic>Story</a>
       <a href="#playground" data-magnetic>Playground</a>
+      <a href="#signature" data-magnetic>Signature</a>
     </nav>
 
     <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" aria-label="Enable ambient sound" data-magnetic>
@@ -206,6 +208,41 @@
         <div class="physics-item physics-item-e" data-x="20" data-y="300">notice</div>
       </div>
     </section>
+
+    <!-- ============================ SIGNATURE =========================== -->
+    <section id="signature" class="signature" data-section aria-label="Your attention signature">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">YOURS ALONE</p>
+        <h2>This is what your attention looks like.</h2>
+        <p class="section-lede">
+          Everything the engine noticed about this visit, drawn as one image. Rings are the
+          sections you reached, nodes are where you clicked, the core brightens with how
+          deeply you engaged. Nobody else will get this picture.
+        </p>
+      </div>
+
+      <div class="signature-stage" data-reveal>
+        <div class="signature-frame">
+          <canvas class="signature-canvas" role="img"
+                  aria-label="A generative artwork produced from your interactions with this page"></canvas>
+        </div>
+        <div class="signature-side">
+          <p class="signature-title">Quiet Drift</p>
+          <p class="signature-stats">Scroll here to render your signature.</p>
+          <div class="signature-actions">
+            <button class="btn btn-ghost" type="button" data-signature-regen data-magnetic data-sound="click">
+              Reimagine it
+            </button>
+            <button class="btn btn-primary" type="button" data-signature-save data-magnetic data-sound="click">
+              Save as image
+            </button>
+          </div>
+          <p class="signature-note">
+            Keep exploring and come back — it redraws from whatever you've done by then.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ==================== ATTENTION MODE INDICATOR ====================== -->
@@ -237,6 +274,8 @@
   <script src="js/attention/engagementModel.js" defer></script>
   <script src="js/attention/attentionState.js" defer></script>
   <script src="js/attention/experienceAdapter.js" defer></script>
+  <script src="js/attention/sessionRecorder.js" defer></script>
+  <script src="js/components/shaderBackground.js" defer></script>
   <script src="js/components/cursor.js" defer></script>
   <script src="js/components/particles.js" defer></script>
   <script src="js/components/heroType.js" defer></script>
@@ -247,6 +286,10 @@
   <script src="js/components/soundEngine.js" defer></script>
   <script src="js/components/easterEggs.js" defer></script>
   <script src="js/components/journeyMemory.js" defer></script>
+  <script src="js/components/signature.js" defer></script>
+  <script src="js/components/commandPalette.js" defer></script>
+  <script src="js/components/deviceTilt.js" defer></script>
+  <script src="js/components/returningVisitor.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

@@ -1,8 +1,79 @@
+.ae-shader-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-bg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s var(--ease-out);
+}
+.ae-shader-canvas.is-active {
+  opacity: 1;
+}
+.ae-shader-canvas.is-hidden {
+  opacity: 0;
+}
+
 .ae-bg-canvas {
   position: fixed;
   inset: 0;
-  z-index: var(--z-bg);
+  z-index: 1;
   pointer-events: none;
+}
+
+/* --- signature ----------------------------------------------------------- */
+.signature-stage {
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 6vw;
+}
+@media (min-width: 880px) {
+  .signature-stage {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+.signature-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--bg-elevated), var(--bg-elevated-2));
+  aspect-ratio: 1;
+}
+.signature-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.signature-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.signature-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  color: var(--fg);
+  line-height: 1.1;
+}
+.signature-stats {
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+}
+.signature-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+.signature-note {
+  font-size: 0.85rem;
+  color: var(--fg-faint);
+  font-style: italic;
 }
 
 main, header, footer {

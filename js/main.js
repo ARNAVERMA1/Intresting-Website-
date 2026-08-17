@@ -78,6 +78,7 @@
     signals.on('section', (id) => document.dispatchEvent(new CustomEvent('attention:section', { detail: { id } })));
 
     window.AEExperienceAdapter.createExperienceAdapter(attentionState);
+    const recorder = window.AESessionRecorder.createSessionRecorder();
     signals.start();
 
     // Expose a minimal read-only hook for future analytics/ML swap-in,
@@ -85,9 +86,15 @@
     window.AttentionEngine = {
       getState: attentionState.getSnapshot,
       on: attentionState.on,
+      getSessionRecord: () => recorder.getRecord(),
     };
 
     // --- 2. Visual layer -------------------------------------------------------
+    // The shader field is the deepest layer and is allowed to fail: on low-tier
+    // devices, reduced-motion, or without WebGL it simply never starts, and
+    // the 2D particle field below carries the environment by itself.
+    window.AEShaderBackground.initShaderBackground(document.getElementById('ae-shader-canvas'));
+
     const canvas = document.getElementById('ae-bg-canvas');
     if (canvas) window.AEParticles.initParticles(canvas);
 
@@ -121,6 +128,80 @@
     if (footerLine) window.AEJourneyMemory.initJourneyMemory(footerLine);
 
     initSayHello(document.getElementById('say-hello'));
+
+    // --- 3. Session-aware features ------------------------------------------
+    const signature = window.AESignature.initSignature(
+      document.getElementById('signature'),
+      recorder
+    );
+
+    const tilt = window.AEDeviceTilt.initDeviceTilt();
+    window.AEDeviceTilt.initHaptics();
+
+    const visitor = window.AEReturningVisitor.initReturningVisitor({
+      eyebrowEl: document.querySelector('.hero .eyebrow'),
+      recorder,
+      onGreet: (line) => setTimeout(() => showToast(line), 1600),
+    });
+
+    // --- 4. Command palette --------------------------------------------------
+    const jump = (id) => () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+
+    const commands = [
+      { label: 'Go to top', icon: '↑', keywords: 'hero home start', run: jump('hero') },
+      { label: 'The Engine', icon: '◎', keywords: 'attention model how it works', run: jump('engine') },
+      { label: 'Fragments', icon: '◈', keywords: 'cards showcase', run: jump('showcase') },
+      { label: 'The Story', icon: '❯', keywords: 'scroll narrative', run: jump('story') },
+      { label: 'Playground', icon: '◍', keywords: 'physics drag toy', run: jump('playground') },
+      { label: 'Your Signature', icon: '✦', keywords: 'art generative image', run: jump('signature') },
+      {
+        label: 'Toggle ambient sound',
+        icon: '♪',
+        keywords: 'audio music mute volume',
+        run: () => document.getElementById('sound-toggle')?.click(),
+      },
+      {
+        label: 'Reimagine my signature',
+        icon: '↻',
+        keywords: 'regenerate art redraw',
+        run: () => {
+          jump('signature')();
+          setTimeout(() => document.querySelector('[data-signature-regen]')?.click(), 700);
+        },
+      },
+      {
+        label: 'Save my signature',
+        icon: '⇩',
+        keywords: 'download png export image',
+        run: () => document.querySelector('[data-signature-save]')?.click(),
+      },
+    ];
+
+    if (tilt.supported && tilt.needsPermission) {
+      commands.push({
+        label: 'Enable motion tilt',
+        icon: '⟡',
+        keywords: 'gyroscope parallax phone sensor',
+        run: async () => {
+          const ok = await tilt.request();
+          showToast(ok ? 'Tilt enabled — move your phone.' : 'Motion access was declined.');
+        },
+      });
+    }
+
+    if (visitor.isReturning) {
+      commands.push({
+        label: 'Forget me',
+        icon: '⌫',
+        keywords: 'clear reset privacy history memory',
+        run: () => {
+          visitor.forget();
+          showToast('Forgotten. Next visit starts fresh.');
+        },
+      });
+    }
+
+    window.AECommandPalette.initCommandPalette(commands);
 
     // First paint is done — release the loading veil.
     requestAnimationFrame(() => {
