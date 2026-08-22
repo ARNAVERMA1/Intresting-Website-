@@ -57,9 +57,17 @@
       <a href="#signature" data-magnetic>Signature</a>
     </nav>
 
-    <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" aria-label="Enable ambient sound" data-magnetic>
-      <span class="sound-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-    </button>
+    <div class="header-actions">
+      <button id="palette-trigger" class="palette-trigger" type="button"
+              aria-label="Open command menu" aria-haspopup="dialog" data-magnetic data-sound="click">
+        <span class="palette-trigger-glyph" aria-hidden="true"><i></i><i></i><i></i></span>
+        <kbd class="palette-trigger-key" aria-hidden="true">⌘K</kbd>
+      </button>
+
+      <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" aria-label="Enable ambient sound" data-magnetic>
+        <span class="sound-toggle-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+    </div>
   </header>
 
   <main id="main">

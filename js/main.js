@@ -245,7 +245,13 @@
       });
     }
 
-    safeInit('commandPalette', () => window.AECommandPalette.initCommandPalette(commands));
+    safeInit('commandPalette', () => {
+      const palette = window.AECommandPalette.initCommandPalette(commands);
+      // Touch devices have no nav links and no keyboard shortcut, so this
+      // button is their only route between sections.
+      document.getElementById('palette-trigger')?.addEventListener('click', () => palette.open());
+      return palette;
+    });
 
     // First paint is done — release the loading veil.
     requestAnimationFrame(() => {

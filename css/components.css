@@ -99,6 +99,62 @@
   color: var(--fg-dim);
 }
 
+/* --- header actions ------------------------------------------------------- */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The only navigation a phone gets: .site-nav is hidden below 760px, and the
+   palette's ⌘K / "/" shortcuts need a physical keyboard. Without this button
+   a touch visitor can only reach the far sections by scrolling the whole page. */
+.palette-trigger {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  color: var(--fg-dim);
+  transition: color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+.palette-trigger:hover {
+  color: var(--fg);
+  border-color: var(--mode-color);
+}
+.palette-trigger-glyph {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  width: 15px;
+}
+.palette-trigger-glyph i {
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.palette-trigger-glyph i:nth-child(2) { width: 70%; }
+.palette-trigger-key {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-faint);
+}
+/* The keyboard hint is meaningless without a keyboard. */
+@media (max-width: 759px) {
+  .palette-trigger-key {
+    display: none;
+  }
+  .palette-trigger {
+    padding: 0;
+    width: 40px;
+    justify-content: center;
+  }
+}
+
 .sound-toggle {
   width: 40px;
   height: 40px;
@@ -210,7 +266,12 @@
   padding: 16px 18px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line-strong);
+  /* Solid fallback first: browsers without color-mix (iOS Safari < 16.2)
+     drop that declaration entirely and would otherwise render this panel
+     fully transparent. Same pattern everywhere color-mix sets a background. */
+  background: rgba(14, 12, 26, 0.92);
   background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   opacity: 0;
   transform: translateY(10px);
@@ -333,7 +394,9 @@
   padding: 12px 20px;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
+  background: rgba(14, 12, 26, 0.9);
   background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   font-size: 0.86rem;
   color: var(--fg-dim);
@@ -366,6 +429,7 @@
   padding-top: clamp(60px, 14vh, 160px);
   padding-inline: 5vw;
   background: rgba(7, 6, 13, 0.66);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   opacity: 0;
   transition: opacity 0.28s var(--ease-out);
@@ -377,6 +441,7 @@
   width: min(560px, 100%);
   border-radius: var(--radius-md);
   border: 1px solid var(--line-strong);
+  background: rgba(14, 12, 26, 0.97);
   background: color-mix(in srgb, var(--bg-elevated) 96%, transparent);
   box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.8);
   overflow: hidden;
@@ -416,6 +481,7 @@
   transition: background 0.18s ease, color 0.18s ease;
 }
 .ae-palette-item.is-active {
+  background: rgba(185, 164, 255, 0.16);
   background: color-mix(in srgb, var(--mode-color) 16%, transparent);
   color: var(--fg);
 }
@@ -448,6 +514,12 @@
   border-top: 1px solid var(--line);
   font-size: 0.76rem;
   color: var(--fg-faint);
+}
+/* Pure keyboard guidance — noise on a device with no esc key. */
+@media (max-width: 759px) {
+  .ae-palette-hint {
+    display: none;
+  }
 }
 .ae-palette-hint kbd {
   padding: 2px 6px;
