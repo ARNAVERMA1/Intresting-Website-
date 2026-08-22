@@ -13,7 +13,7 @@
 (function (global) {
   'use strict';
 
-  const { clamp, map } = global.AEUtils;
+  const { clamp } = global.AEUtils;
 
   const PALETTES = {
     dormant: ['#8ea3d6', '#6d7fb0', '#c3cde8'],

@@ -207,6 +207,20 @@
       canvas.classList.add('is-hidden');
     });
 
+    // The aurora is the single most expensive thing on the page, so it is the
+    // first thing to go when the governor reports the device can't keep up.
+    // Retiring it permanently (rather than flickering it back on) keeps the
+    // recovered frame budget for the interactions people actually touch.
+    let retired = false;
+    document.addEventListener('ae:quality', (e) => {
+      if (retired || e.detail.step < 2) return;
+      retired = true;
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      canvas.classList.add('is-hidden');
+      canvas.classList.remove('is-active');
+    });
+
     function frame() {
       if (!running) return;
       const t = (performance.now() - startTime) / 1000;

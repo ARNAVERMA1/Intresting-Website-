@@ -17,6 +17,17 @@ python3 -m http.server 8000
 # then visit http://localhost:8000
 ```
 
+## Tests
+
+```bash
+node tests/run.js
+```
+
+Zero dependencies. The engagement model is a pure function by design, so these tests pin down its
+contract — score always in `0..1`, modes always ones the adapter can render, purity, monotonicity
+(rising engagement never moves the mode backwards). Anyone swapping the heuristic for a trained
+model should be able to run these unchanged.
+
 ## Architecture
 
 The engine is split into four isolated layers, wired together only in `js/main.js`:
@@ -62,7 +73,23 @@ without ever importing the engine directly.
 
 ## Graceful degradation
 
-Respects `prefers-reduced-motion`, scales particle/motion density by device capability, and keeps
-the custom cursor off touch devices. The WebGL layer is fully optional — on low-tier devices,
-reduced-motion, missing WebGL, or a lost context it simply never starts, and the 2D particle field
-carries the environment on its own. `localStorage` and Clipboard failures are caught and fall back.
+Respects `prefers-reduced-motion`, keeps the custom cursor off touch devices, and catches
+`localStorage` / Clipboard / Web Audio failures rather than letting them surface.
+
+Effect budget is decided in two stages. `detectDeviceTier()` makes a static guess at load from core
+count and memory; `performanceGovernor.js` then measures the frame rate actually being delivered
+and scales the whole budget to match — downgrading readily, upgrading reluctantly, never
+oscillating. If the frame rate stays poor, the WebGL aurora retires itself first, since it's the
+most expensive thing on the page. Read the live numbers with `AttentionEngine.getPerformance()`.
+
+The WebGL layer is optional at every step: low-tier device, reduced-motion, missing WebGL, lost
+context, or a sustained frame-rate drop all end with the 2D particle field carrying the environment
+alone. Each component is also initialized behind a guard in `main.js`, so one failing at startup
+degrades that feature instead of aborting the page.
+
+## Known trade-offs
+
+Several components run their own `requestAnimationFrame` loop rather than sharing one scheduler.
+Each loop is cheap and skips work when idle, and the governor measures the real-world result — but
+consolidating them behind a single scheduler is the obvious next optimization if the component
+count grows.

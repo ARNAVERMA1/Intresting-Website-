@@ -91,7 +91,13 @@
       const stepIndex = clamp(Math.floor(progress * steps.length), 0, steps.length - 1);
       wrapper.style.setProperty('--story-progress', progress.toFixed(4));
       steps.forEach((step, i) => {
-        step.classList.toggle('is-active', i === stepIndex);
+        const active = i === stepIndex;
+        step.classList.toggle('is-active', active);
+        // Inactive steps are stacked invisibly on top of each other; without
+        // this a screen reader would announce all four at once as one blob.
+        if (step.getAttribute('aria-hidden') !== String(!active)) {
+          step.setAttribute('aria-hidden', String(!active));
+        }
         const localProgress = clamp(map(progress * steps.length, i, i + 1, 0, 1), 0, 1);
         step.style.setProperty('--step-progress', localProgress.toFixed(3));
       });

@@ -67,6 +67,21 @@
     });
   }
 
+  /**
+   * Every visual component is independent and optional. Running each behind
+   * this guard means one throwing at startup — an unsupported API, a missing
+   * element after a markup change — degrades that one feature instead of
+   * aborting the rest of the bootstrap and leaving a dead page.
+   */
+  function safeInit(name, fn) {
+    try {
+      return fn();
+    } catch (err) {
+      console.warn(`[main] "${name}" failed to initialize; continuing without it.`, err);
+      return null;
+    }
+  }
+
   ready(() => {
     // --- 1. Attention Engine -------------------------------------------------
     const signals = window.AESignals.createSignals();
@@ -77,7 +92,12 @@
     signals.observeSections(sections);
     signals.on('section', (id) => document.dispatchEvent(new CustomEvent('attention:section', { detail: { id } })));
 
-    window.AEExperienceAdapter.createExperienceAdapter(attentionState);
+    const governor = safeInit('performanceGovernor', () =>
+      window.AEPerformanceGovernor.createPerformanceGovernor()
+    );
+    window.AEExperienceAdapter.createExperienceAdapter(attentionState, document.documentElement, {
+      governor,
+    });
     const recorder = window.AESessionRecorder.createSessionRecorder();
     signals.start();
 
@@ -87,62 +107,86 @@
       getState: attentionState.getSnapshot,
       on: attentionState.on,
       getSessionRecord: () => recorder.getRecord(),
+      getPerformance: () => ({ fps: governor?.getFps() ?? null, scale: governor?.getScale() ?? 1 }),
     };
 
     // --- 2. Visual layer -------------------------------------------------------
     // The shader field is the deepest layer and is allowed to fail: on low-tier
     // devices, reduced-motion, or without WebGL it simply never starts, and
     // the 2D particle field below carries the environment by itself.
-    window.AEShaderBackground.initShaderBackground(document.getElementById('ae-shader-canvas'));
-
-    const canvas = document.getElementById('ae-bg-canvas');
-    if (canvas) window.AEParticles.initParticles(canvas);
-
-    window.AECursor.initCursor();
-
-    document.querySelectorAll('[data-hero-title]').forEach((el) => {
-      window.AEHeroType.initHeroType(el);
-    });
-
-    const indicator = document.getElementById('attention-indicator');
-    if (indicator) window.AEIndicator.initAttentionIndicator(indicator);
-
-    const cardEls = document.querySelectorAll('.card');
-    if (cardEls.length) window.AECards.initCards(cardEls);
-
-    window.AEScrollStory.initReveals();
-    window.AEScrollStory.initParallax();
-    document.querySelectorAll('[data-story-wrapper]').forEach((el) => {
-      window.AEScrollStory.initPinnedStory(el);
-    });
-
-    const stage = document.querySelector('.physics-stage');
-    if (stage) window.AEPhysicsPlayground.initPhysicsPlayground(stage);
-
-    const soundToggle = document.getElementById('sound-toggle');
-    window.AESoundEngine.initSoundEngine(soundToggle);
-
-    window.AEEasterEggs.initEasterEggs({ logoEl: document.querySelector('.site-logo') });
-
-    const footerLine = document.querySelector('.footer-line');
-    if (footerLine) window.AEJourneyMemory.initJourneyMemory(footerLine);
-
-    initSayHello(document.getElementById('say-hello'));
-
-    // --- 3. Session-aware features ------------------------------------------
-    const signature = window.AESignature.initSignature(
-      document.getElementById('signature'),
-      recorder
+    safeInit('shaderBackground', () =>
+      window.AEShaderBackground.initShaderBackground(document.getElementById('ae-shader-canvas'))
     );
 
-    const tilt = window.AEDeviceTilt.initDeviceTilt();
-    window.AEDeviceTilt.initHaptics();
-
-    const visitor = window.AEReturningVisitor.initReturningVisitor({
-      eyebrowEl: document.querySelector('.hero .eyebrow'),
-      recorder,
-      onGreet: (line) => setTimeout(() => showToast(line), 1600),
+    safeInit('particles', () => {
+      const canvas = document.getElementById('ae-bg-canvas');
+      if (canvas) window.AEParticles.initParticles(canvas);
     });
+
+    safeInit('cursor', () => window.AECursor.initCursor());
+
+    safeInit('heroType', () => {
+      document.querySelectorAll('[data-hero-title]').forEach((el) => {
+        window.AEHeroType.initHeroType(el);
+      });
+    });
+
+    safeInit('attentionIndicator', () => {
+      const indicator = document.getElementById('attention-indicator');
+      if (indicator) window.AEIndicator.initAttentionIndicator(indicator);
+    });
+
+    safeInit('cards', () => {
+      const cardEls = document.querySelectorAll('.card');
+      if (cardEls.length) window.AECards.initCards(cardEls);
+    });
+
+    safeInit('scrollStory', () => {
+      window.AEScrollStory.initReveals();
+      window.AEScrollStory.initParallax();
+      document.querySelectorAll('[data-story-wrapper]').forEach((el) => {
+        window.AEScrollStory.initPinnedStory(el);
+      });
+    });
+
+    safeInit('physicsPlayground', () => {
+      const stage = document.querySelector('.physics-stage');
+      if (stage) window.AEPhysicsPlayground.initPhysicsPlayground(stage);
+    });
+
+    safeInit('soundEngine', () =>
+      window.AESoundEngine.initSoundEngine(document.getElementById('sound-toggle'))
+    );
+
+    safeInit('easterEggs', () =>
+      window.AEEasterEggs.initEasterEggs({ logoEl: document.querySelector('.site-logo') })
+    );
+
+    safeInit('journeyMemory', () => {
+      const footerLine = document.querySelector('.footer-line');
+      if (footerLine) window.AEJourneyMemory.initJourneyMemory(footerLine);
+    });
+
+    safeInit('sayHello', () => initSayHello(document.getElementById('say-hello')));
+
+    // --- 3. Session-aware features ------------------------------------------
+    safeInit('signature', () =>
+      window.AESignature.initSignature(document.getElementById('signature'), recorder)
+    );
+
+    const tilt =
+      safeInit('deviceTilt', () => window.AEDeviceTilt.initDeviceTilt()) ||
+      { supported: false, needsPermission: false, request: async () => false };
+    safeInit('haptics', () => window.AEDeviceTilt.initHaptics());
+
+    const visitor =
+      safeInit('returningVisitor', () =>
+        window.AEReturningVisitor.initReturningVisitor({
+          eyebrowEl: document.querySelector('.hero .eyebrow'),
+          recorder,
+          onGreet: (line) => setTimeout(() => showToast(line), 1600),
+        })
+      ) || { isReturning: false, forget: () => false };
 
     // --- 4. Command palette --------------------------------------------------
     const jump = (id) => () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -201,7 +245,7 @@
       });
     }
 
-    window.AECommandPalette.initCommandPalette(commands);
+    safeInit('commandPalette', () => window.AECommandPalette.initCommandPalette(commands));
 
     // First paint is done — release the loading veil.
     requestAnimationFrame(() => {

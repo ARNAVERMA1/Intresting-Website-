@@ -44,7 +44,10 @@
     low: 0.42,
   };
 
-  function createExperienceAdapter(attentionState, root = document.documentElement) {
+  function createExperienceAdapter(attentionState, root = document.documentElement, options = {}) {
+    // Optional: a live frame-rate governor whose scale multiplies the static
+    // device cap, so a struggling device sheds effects instead of stuttering.
+    const governor = options.governor || null;
     const reduced = prefersReducedMotion();
     const deviceTier = detectDeviceTier();
     const deviceCap = DEVICE_CAPS[deviceTier] ?? 0.72;
@@ -69,7 +72,8 @@
       lastFrame = t;
 
       const profile = MODE_PROFILES[currentMode] || MODE_PROFILES.ambient;
-      const cap = reduced ? Math.min(deviceCap, 0.3) : deviceCap;
+      const baseCap = reduced ? Math.min(deviceCap, 0.3) : deviceCap;
+      const cap = baseCap * (governor ? governor.getScale() : 1);
 
       const targetMotion = (reduced ? profile.motion * 0.25 : profile.motion) * cap;
       const targetParticles = (reduced ? 0 : profile.particleDensity) * cap;

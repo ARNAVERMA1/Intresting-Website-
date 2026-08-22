@@ -8,6 +8,19 @@
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#07060d" />
 
+  <!-- Social preview. og:image wants an absolute URL in production — set
+       these to the deployed origin when the site gets a real domain. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Attention Engine — a website that notices you" />
+  <meta property="og:description" content="Move, scroll, linger. A client-side engine reads how you explore this page and reshapes it around you in real time — then draws you a picture of what it saw." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Attention Engine — a website that notices you" />
+  <meta name="twitter:description" content="A page that reads how you explore it, adapts in real time, and hands you a generative portrait of your own attention." />
+  <meta name="twitter:image" content="og-image.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,680;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -275,6 +288,7 @@
   <script src="js/attention/attentionState.js" defer></script>
   <script src="js/attention/experienceAdapter.js" defer></script>
   <script src="js/attention/sessionRecorder.js" defer></script>
+  <script src="js/attention/performanceGovernor.js" defer></script>
   <script src="js/components/shaderBackground.js" defer></script>
   <script src="js/components/cursor.js" defer></script>
   <script src="js/components/particles.js" defer></script>
